@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Users from './components/Users';
+import { validateInfo } from './components/Validate';
 import './App.css';
 
 class App extends Component {
@@ -59,63 +60,8 @@ class App extends Component {
     this.setState({ users: this.state.users.filter(user => user.id !== id) });
   }
 
-  //validate given information
-  validateInfo = (user) => {
-    let flag = 0;
-    //console.log("indise validate omfo");
-    if (user.name == null) {
-      alert("Name can't be empty, please enter your Full Name...");
-      flag++;
-      return false;
-    } else {
-      let regex = /^[a-zA-Z ]+$/;
-      if (!regex.test(user.name)) {
-        alert("Please enter valid name. e.g. John Doe.");
-        flag++;
-        return false;
-      }
-    }
+  //validate given information using validate.js file
 
-    if (user.email == null) {
-      alert("e-Mail can't be empty, please enter your e-Mail ID...");
-      flag++;
-      return false;
-    } else {
-      let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (!regex.test(user.email)) {
-        alert("Please enter valid email. e.g. johndoe@example.com");
-        flag++;
-        return false;
-      }
-    }
-    if (user.age == null) {
-      alert("Age can't be empty, please enter your age...");
-      flag++;
-      return false;
-    } else {
-      if (user.age <= 13) {
-        alert("Age must be less greater than 13 & less then 85.");
-        flag++;
-        return false;
-      }
-    }
-
-    if (user.gender === "") {
-      alert("Gender can't be empty, please enter your gender...");
-      flag++;
-      return false;
-    } else {
-      if (user.gender !== "Male" && user.gender !== "Female" && user.gender !== "Others") {
-        alert("Gender must be Male or Female.");
-        flag++;
-        return false;
-      }
-    }
-
-    if (flag === 0) {
-      return true;
-    }
-  }
   //add user with appropriate information
   addUser = (e) => {
     e.preventDefault();
@@ -128,7 +74,7 @@ class App extends Component {
         gender: this.state.userGender,
         agreed: true
       }
-      if (this.validateInfo(addNewUser)) {
+      if (validateInfo(addNewUser)) {
         //console.log("in if created con");
         this.setState({ users: [...this.state.users, addNewUser] });
         this.setState({
@@ -149,7 +95,7 @@ class App extends Component {
         gender: this.state.userGender,
         agreed: true
       }
-      if (this.validateInfo(addNewUser)) {
+      if (validateInfo(addNewUser)) {
         this.setState({ users: [...this.state.users, addNewUser] });
         this.setState({
           userFullName: "",
@@ -185,7 +131,7 @@ class App extends Component {
       gender: this.state.editGender,
       agreed: true
     }
-    if (this.validateInfo(user)) {
+    if (validateInfo(user)) {
       let index = this.state.users.findIndex((item) => item.id === tempid);
       this.state.users.splice(index, 1, user);
       this.setState(this.state);
